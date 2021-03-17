@@ -61,7 +61,7 @@ for (i, c) in enumerate(contourns, 1):
             sudoku_rows.append(contourns)
             temp_row = []
 
-string_path = 'img_r/FONT{}NUMBER_{}.jpg'
+string_path = 'img_r/FONT{}-NUMBER_{}.jpg'
 for row, i in zip(sudoku_rows, range(1,10,1)):
     for c, j in zip(row, range(1,10,1)):
         print('here')
