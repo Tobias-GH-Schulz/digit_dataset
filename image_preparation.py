@@ -7,8 +7,9 @@ from skimage.segmentation import clear_border
 import numpy as np
 import matplotlib.pyplot as plt
 
-font = input("Which font shall be prepared?")
-
+fonts = ["Arial", "Calibri", "Verdana", 
+        "Times New Roman", "Rockwell", "Helvetica",
+        "Garamond", "Futura", "Franklin Gothic", "Cambria"]
 
 def detect_digits(input_path, font, index1):
     index1 = index1
@@ -45,20 +46,6 @@ def detect_digits(input_path, font, index1):
             cv2.imwrite(f"./printed_digits/cropped/{font}/{font}_"+ str(index1) + "_" + str(idx) + ".png", cropped_single_digit)
 
     return input_image_sm, count
-
-# our folder path containing some images
-folder_path = f'./printed_digits/input_images/{font}'
-
-# loop on all files of the folder and build a list of files paths
-images = [os.path.join(folder_path, f) for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
-images = [ x for x in images if ".DS_Store" not in x ]
-
-index1 = 1
-
-for i in images:
-    input_image_sm, count = detect_digits(i, font, index1)
-    index1 += 1
-
 
 def prep_image(single_digit_path, font, index):
     image = cv2.imread(single_digit_path)
@@ -98,23 +85,38 @@ def prep_image(single_digit_path, font, index):
     # resize
     image_sm = cv2.resize(image_crop, (28, 28))
 
-    cv2.imwrite(f"./printed_digits/train_images/{font}/{font}" + str(index) + ".png", image_sm)
+    cv2.imwrite(f"./printed_digits/train_images/{font}/{font}" + str(index) + ".jpg", image_sm)
      
     # reshape 
     #image_reshaped = image_sm.reshape(1,28,28,1)
     
     #test_image = (image_reshaped[...,::-1].astype(np.float32)) / 255.0 
 
+for font in fonts:
+    # cropping the input images
+    # older path containing the input images
+    input_folder_path = f'./printed_digits/input_images/{font}'
 
-# our folder path containing some images
-folder_path = f'./printed_digits/cropped/{font}' 
+    # loop on all files of the folder and build a list of files paths
+    input_images = [os.path.join(input_folder_path, f) for f in os.listdir(input_folder_path) if os.path.isfile(os.path.join(input_folder_path, f))]
+    input_images = [ x for x in input_images if ".DS_Store" not in x ]
 
-# loop on all files of the folder and build a list of files paths
-images = [os.path.join(folder_path, f) for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
-images = [ x for x in images if ".DS_Store" not in x ]
+    index1 = 1
 
-index1 = 1
+    for i in input_images:
+        input_image_sm, count = detect_digits(i, font, index1)
+        index1 += 1
 
-for i in images:
-    prep_image(i, font, index1)
-    index1 += 1
+    # augmentation on the cropped images
+    # folder path containing the cropped images
+    cropped_folder_path = f'./printed_digits/cropped/{font}' 
+
+    # loop on all files of the folder and build a list of files paths
+    cropped_images = [os.path.join(cropped_folder_path, f) for f in os.listdir(cropped_folder_path) if os.path.isfile(os.path.join(cropped_folder_path, f))]
+    cropped_images = [ x for x in cropped_images if ".DS_Store" not in x ]
+
+    index2 = 1
+
+    for i in cropped_images:
+        prep_image(i, font, index2)
+        index2 += 1

@@ -55,14 +55,16 @@ fonts = ["Arial", "Calibri", "Verdana",
         "Times New Roman", "Rockwell", "Helvetica",
         "Garamond", "Futura", "Franklin Gothic", "Cambria"]
 
-num_files_desired = int(input("How many pictures should be created?"))
+num_files_total = int(input("How many pictures should be created?"))
 
 for font in fonts:
     for number in range(0,10):
-        folder_path = f"/Users/tobiasschulz/Documents/GitHub/digit_dataset/printed_digits/train_images/{font}/{number}"
+        folder_path = f"./printed_digits/train_images/{font}/{number}"
         # find all files paths from the folder
         images = [os.path.join(folder_path, f) for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
         images = [ x for x in images if ".DS_Store" not in x ]
+
+        num_files_desired = num_files_total - len(images) - 1
 
         num_generated_files = 0
         while num_generated_files <= num_files_desired:
@@ -70,6 +72,7 @@ for font in fonts:
             image_path = random.choice(images)
             # read image as an two dimensional array of pixels
             image_to_transform = io.imread(image_path, plugin="matplotlib")
+
             print("Image loaded")
             # random num of transformation to apply
             num_transformations_to_apply = random.randint(1, len(available_transformations))
