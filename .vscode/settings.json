@@ -1,3 +1,4 @@
 {
-    "python.pythonPath": "/home/lorenzo/anaconda3/envs/tf-gpu/bin/python"
+    "python.pythonPath": "/home/lorenzo/anaconda3/envs/tf-gpu/bin/python",
+    "git.ignoreLimitWarning": true
 }
