@@ -7,6 +7,9 @@ from skimage.segmentation import clear_border
 import numpy as np
 import matplotlib.pyplot as plt
 
+font = input("Which font shall be prepared?")
+
+
 def detect_digits(input_path, font, index1):
     index1 = index1
     input_image = cv2.imread(input_path)
@@ -42,10 +45,6 @@ def detect_digits(input_path, font, index1):
             cv2.imwrite(f"./printed_digits/cropped/{font}/{font}_"+ str(index1) + "_" + str(idx) + ".png", cropped_single_digit)
 
     return input_image_sm, count
-
-
-
-font = input("Which font shall be prepared?")
 
 # our folder path containing some images
 folder_path = f'./printed_digits/input_images/{font}'
