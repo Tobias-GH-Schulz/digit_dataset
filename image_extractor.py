@@ -22,13 +22,14 @@ def save_image(img, contourn, path_string):
     #print_image(cropped_contour)
     return 
 
-image = cv2.imread('grid.jpg', 0)
+image = cv2.imread('grid3.jpeg', 0)
+#image = cv2.resize(image,(225,225))
 #gray = cv2.cvtColor(image, cv2.COLOR_BAYER_BG2GRAY)
 thresh = cv2.adaptiveThreshold(image, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 57, 5)
 print(thresh.shape)
 contourns, h = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-
+print_image(thresh)
 for contourn in contourns:
     area = cv2.contourArea(contourn)
     if area < 550:
@@ -60,9 +61,9 @@ for (i, c) in enumerate(contourns, 1):
             contourns, _ = cts.sort_contours(temp_row, method = "left-to-right")
             sudoku_rows.append(contourns)
             temp_row = []
-
-string_path = 'img_r/FONT{}-NUMBER_{}.jpg'
-for row, i in zip(sudoku_rows, range(1,10,1)):
+font_list = ['Helvetica','Calibri','Futura','Garamond','TimesNewRoman','Arial','Cambria','Verdana','Rockwell']
+string_path = 'img_t/{}-NUMBER_{}.jpg'
+for row, i in zip(sudoku_rows, font_list):
     for c, j in zip(row, range(1,10,1)):
         print('here')
         save_image(image.copy(), c, string_path.format(i,j))
