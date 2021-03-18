@@ -3,6 +3,7 @@ import random
 from scipy import ndarray
 
 # image processing library
+import cv2
 import skimage as sk
 from skimage import transform
 from skimage import util
@@ -19,14 +20,35 @@ def random_noise(image_array: ndarray):
     return sk.util.random_noise(image_array)
 
 def horizontal_stretch(image_array: ndarray):
-    # horizontal flip doesn't need skimage, it's easy as flipping the image array of pixels !
-    return image_array[:, ::-1]
+    new_width = random.randint(31, 35)
+    # dsize
+    dsize = (new_width, image_array.shape[0])
+
+    # resize image
+    resized_image = cv2.resize(image_array, dsize, interpolation = cv2.INTER_AREA)
+
+    pad = (new_width - image_array.shape[0]) / 2
+    horizontal_stretch = resized_image[int(0):int(resized_image.shape[0]), int(0+pad):int(resized_image.shape[1]-pad)]
+    return horizontal_stretch
+
+def vertical_stretch(image_array: ndarray):
+    new_width = random.randint(31, 35)
+    # dsize
+    dsize = (image_array.shape[0], new_width)
+    
+    # resize image
+    resized_image = cv2.resize(image_array, dsize, interpolation = cv2.INTER_AREA)
+    
+    pad = (new_width - image_array.shape[1]) / 2
+    vertical_stretch = resized_image[int(0+pad):int(resized_image.shape[0]-pad), int(0):int(resized_image.shape[1])]
+    return vertical_stretch
 
 # dictionary of the transformations we defined earlier
 available_transformations = {
     'rotate': random_rotation,
     'noise': random_noise,
-    'horizontal_flip': horizontal_flip
+    'horizontal_stretch': horizontal_stretch,
+    'vertical_stretch': vertical_stretch
 }
 
 font = input("What is the font?")
