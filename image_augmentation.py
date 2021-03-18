@@ -28,6 +28,7 @@ for data in font_list:
     os.mkdir("img_aug/{}".format(data))
     for num, i in zip(img_arr[data], range(1,10,1)):
         samples = expand_dims(num, 0)
+        # VARY THOSE PARAMETERS TO GET DIFFERENT AUGMENTATIONS
         datagen = ImageDataGenerator(
             featurewise_center=False,
             samplewise_center=False,
