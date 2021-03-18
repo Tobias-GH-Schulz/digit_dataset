@@ -5,7 +5,6 @@ from tensorflow.keras.preprocessing.image import img_to_array
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.preprocessing.image import save_img
 import os
-#from matplotlib import pyplot
 
 
 font_list = ['Helvetica','Calibri','Futura','Garamond','TimesNewRoman','Arial','Cambria','Verdana','Rockwell']
@@ -15,17 +14,12 @@ for i in font_list:
     for j in range(1,10,1):
         print(string_path.format(i,j))
         img_arr[i].append(img_to_array(load_img(string_path.format(i,j))))
-        #print(img_arr[i])
-counter = 1
-counter_two = 0
-temp_count = 0
-#os.mkdir("img_aug")
-    #print("img_aug/{}".format(i))
+        
 
-path_save = 'img_aug/{}/{}-NUMBER_{}_aug0.{}.jpg'
-
+path_save = '{}/{}-NUMBER_{}_aug0.{}.jpg'
+fold_path = 'img_aug/'
 for data in font_list:
-    os.mkdir("img_aug/{}".format(data))
+    os.mkdir(fold_path + "{}".format(data))
     for num, i in zip(img_arr[data], range(1,10,1)):
         samples = expand_dims(num, 0)
         # VARY THOSE PARAMETERS TO GET DIFFERENT AUGMENTATIONS
@@ -56,11 +50,7 @@ for data in font_list:
         it = datagen.flow(samples, batch_size=1)
         for j in range(9):
             batch = it.next()
-            print("PATH_SAVE ", path_save.format(data,data, i,j))
-            save_img(path_save.format(data,data,i,j), batch[0])
-            #if i == 7: break
-    #if temp_count == 30:
-    #    break
+            print("PATH_SAVE ", fold_path + path_save.format(data,data, i,j))
+            save_img(fold_path + path_save.format(data,data,i,j), batch[0])
 
-print(len(img_arr))
-#datagen = ImageDataGenerator()
+print("AUGMENTATION COMPLETED")
