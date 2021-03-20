@@ -1,7 +1,7 @@
 import splitfolders  # or import split_folders
 
-input_folder = "/Users/tobiasschulz/Documents/GitHub/digit_dataset/printed_digits/all_train_images/"
-output_folder = "/Users/tobiasschulz/Documents/GitHub/digit_dataset/printed_digits/splited_images/"
+input_folder = "/Users/tobiasschulz/Documents/GitHub/digit_dataset/digit_from_grid/img_data/"
+output_folder = "/Users/tobiasschulz/Documents/GitHub/digit_dataset/digit_from_grid/img_splitted/"
 
 
 # Split with a ratio.
