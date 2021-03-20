@@ -31,7 +31,7 @@ class personal_dataset(Dataset):
         if self.transform:
             image = self.transform(image)
         return (image, label)
-    
+#CLASS TO LOAD FROM THE PERSONAL DATASET THE TRAIN AND TEST    
 class personalMINST():
     def __init__(self, path, csv_path, train_size = 0.8, transform = None):
         self.dataset = personal_dataset(path, csv_path, transform=transform)
@@ -45,6 +45,8 @@ class personalMINST():
         return self.test_dataset
 
 '''
+#JUNK CODE FOR DEV
+
 def extract_label(string):
    ret_string = string.split('NUMBER_')[1]
    return ret_string.split('_')[0]

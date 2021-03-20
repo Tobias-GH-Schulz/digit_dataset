@@ -1,7 +1,5 @@
 
 import torch.nn.functional as F
-from numpy.core.fromnumeric import shape
-from torch import functional
 import torch.nn as nn
 from torch.utils.data import DataLoader, Dataset, dataset
 import torch
