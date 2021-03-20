@@ -4,6 +4,7 @@ from tensorflow.keras.preprocessing.image import load_img
 from tensorflow.keras.preprocessing.image import img_to_array
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.preprocessing.image import save_img
+import pandas as pd
 import os
 
 
@@ -22,7 +23,7 @@ path_save = '{}/{}-NUMBER_{}_aug0.{}.jpg'
 fold_path = 'img_aug/'
 #NUMBER OF IMAGES GENERATED
 n_images_generated = 124 #number of images generated
-
+list_ret = []
 for data in font_list:
     #IF FOLDER EXIST COMMENT THIS LINE
     #os.mkdir(fold_path + "{}".format(data))
@@ -56,7 +57,14 @@ for data in font_list:
         it = datagen.flow(samples, batch_size=1)
         for j in range(n_images_generated):
             batch = it.next()
+            temp_dict = {
+                "path": fold_path + path_save.format(data,data, i,j),
+                "label": i
+            }
+            list_ret.append(temp_dict)
             print("PATH_SAVE ", fold_path + path_save.format(data,data, i,j + 1))
             save_img(fold_path + path_save.format(data,data,i,j), batch[0])
 
+df = pd.DataFrame(list_ret, columns=['path', 'label'])
+df.to_csv('path_label.csv', index = False)
 print("AUGMENTATION COMPLETED")
