@@ -1,4 +1,5 @@
 
+#%%
 import torch.nn.functional as F
 import torch.nn as nn
 from torch.utils.data import DataLoader, Dataset, dataset
@@ -7,6 +8,8 @@ from torchvision import transforms
 from nn_module import Net
 import torch.optim as optim
 from load_data import personalMINST
+import numpy as np
+from PIL import Image
 
 def train(epoch):
     network.train()
@@ -16,6 +19,7 @@ def train(epoch):
         loss = criterion(output, target)
         loss.backward()
         optimizer.step()
+        
         if batch_idx % log_interval == 0:
             print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
         epoch, batch_idx * len(data), len(train_loader.dataset),
@@ -43,13 +47,13 @@ def test():
     100. * correct / len(test_loader.dataset)))
 
 # VARIABLE FOR THE TRAINING AND TESTING
-n_epochs = 15
-batch_size_train = 128
+train_size = 0.6
+n_epochs = 20
+batch_size_train = 64
 batch_size_test = 1000
-learning_rate = 0.01
-n_epochs = 15
-momentum = 0.5
-log_interval = 10
+learning_rate = 0.02
+momentum = 0.9
+log_interval = 5
 
 #LOANDING THE DATASET
 #THE TRANSFORM LET YOU SET THE TRANSFORMATIONA THAT YOU WANT ON THE DATASET
@@ -59,14 +63,14 @@ transform_img = transforms.Compose([
 ])
 
 #LOAD TRAIN AND TEST BY CALLING THE PERSONALMINST CLASS AND RELATIVE METHOD (you can set train_size param to change the lenght of train and test size)
-dataset = personalMINST('img_aug', 'path_label.csv', transform = transform_img)
-train_loader = DataLoader(dataset=dataset.get_train(), batch_size=batch_size_train, shuffle=True)
-test_loader = DataLoader(dataset=dataset.get_test(), batch_size=batch_size_test, shuffle=True)
+dataset_l = personalMINST('digit_from_grid/img_aug', 'digit_from_grid/path_label.csv',train_size = train_size, transform = transform_img)
+train_loader = DataLoader(dataset=dataset_l.get_train(), batch_size=batch_size_train, shuffle=True)
+test_loader = DataLoader(dataset=dataset_l.get_test(), batch_size=batch_size_test, shuffle=True)
 
 #LOADING THE NETWORK FROM THE NN_MODULE.PY 
 network = Net()
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.SGD(network.parameters(), lr = learning_rate)
+optimizer = optim.SGD(network.parameters(), lr = learning_rate, momentum = momentum)
 
 #SETTING VARIABLE TO STORE LOSSES
 
@@ -80,11 +84,21 @@ test()
 for epoch in range(1 , n_epochs + 1):
     train(epoch=epoch)
     test()
+    print(epoch, "/", n_epochs)
 
+dataset_sudoku = DataLoader(dataset=dataset_l.get_sudoku('digit_from_grid/img_r','digit_from_grid/img_r/path.csv', transform = transform_img))
+#dataset_sudoku = DataLoader(dataset_sudoku)
+outputs = []
+for data, target in dataset_sudoku:
+  if np.count_nonzero(data.numpy()) != 0:
+    output = network(data)
+    prediction = int(torch.max(output.data, 1)[1].numpy())
+    outputs.append(prediction)
+  else: outputs.append(0)
 
-
-
-
+  
+print("TEST IMAGE")
+print(np.reshape(outputs, (9,9)))
 
 '''
 # PART TO CHECK IF TRAIN AND TEST HAS INTEGRITY BETWEEN IMAGES AND LABEL
@@ -103,11 +117,10 @@ for i in range(6):
   plt.title("Ground Truth: {}".format(example_targets[i]))
   plt.xticks([])
   plt.yticks([])
-fig.savefig('test.jpg')
+fig.savefig('test.jpg') #CHECK test.jpg NOT plt.show() compatibility issue for testing 
 
 #print(features_data.shape, label_data.shape)
 #print(len(label_data))
 
-
-
 '''
+

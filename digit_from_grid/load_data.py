@@ -8,16 +8,29 @@ from pathlib import Path
 import pandas as pd
 import matplotlib.pyplot as plt
 
+class generateCSV():
+    def __init__(self, path_folder):
+        self.list_file = os.listdir(path_folder)
+        self.list_file.sort()
+        temp = []
+        
+        for files in self.list_file:
+           dict_t = {
+               'path':path_folder + files, 
+                'label':0
+           }
+           temp.append(dict_t)
+        print(self.list_file)
+        
+        df = pd.DataFrame(data = temp, columns=['path', 'label'])
+        #print(df)
+        df.to_csv(path_folder + "path.csv", index=None)
+
 class personal_dataset(Dataset):
     def __init__(self, root_dir, csv_file, transform = None):
         self.root = root_dir
         self.image_dir = os.listdir(root_dir)
         self.images_files = []
-        for folder in self.image_dir:
-            image_folder = os.path.join(root_dir, folder)
-            image_files = os.listdir(image_folder)
-            image_files.sort()
-            self.images_files.extend(image_files)
         self.paths = pd.read_csv(csv_file).iloc[:, 0]
         self.data = pd.read_csv(csv_file).iloc[:, 1]
         self.transform = transform
@@ -31,11 +44,12 @@ class personal_dataset(Dataset):
         if self.transform:
             image = self.transform(image)
         return (image, label)
+        
 #CLASS TO LOAD FROM THE PERSONAL DATASET THE TRAIN AND TEST    
 class personalMINST():
     def __init__(self, path, csv_path, train_size = 0.8, transform = None):
-        self.dataset = personal_dataset(path, csv_path, transform=transform)
-        lenghts = [int(len(self.dataset) * train_size) + 1,int(len(self.dataset) * (1- train_size))]
+        self.dataset = personal_dataset(path, csv_path, transform=transform)    
+        lenghts = [int(len(self.dataset) * train_size) + 1, int(len(self.dataset) * (1 - train_size))]
         self.train_dataset, self.test_dataset = torch.utils.data.random_split(self.dataset, lenghts)
 
     def get_train(self):
@@ -44,8 +58,17 @@ class personalMINST():
     def get_test(self):
         return self.test_dataset
 
+    def get_sudoku(self, path, csv_path, transform = None):
+        self.dataset_sudoku = personal_dataset(path, csv_path, transform=transform)  
+        return self.dataset_sudoku
+
+
 '''
+temp = generateCSV('digit_from_grid/img_r/sudoku_grid/')
 #JUNK CODE FOR DEV
+
+
+
 
 def extract_label(string):
    ret_string = string.split('NUMBER_')[1]

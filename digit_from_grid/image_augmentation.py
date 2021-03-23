@@ -9,7 +9,7 @@ import os
 
 
 font_list = ['Helvetica','Calibri','Futura','Garamond','TimesNewRoman','Arial','Cambria','Verdana','Rockwell']
-string_path =  'img_s/{}-NUMBER_{}.jpg'
+string_path =  'digit_from_grid/img_t/NUMBER_{}_{}.jpg'
 img_arr = {'Helvetica':[],'Calibri':[],'Futura':[],'Garamond':[],'TimesNewRoman':[],'Arial':[],'Cambria':[],'Verdana':[],'Rockwell':[]}
 for i in font_list:
     for j in range(1,10,1):
@@ -20,7 +20,7 @@ for i in font_list:
 #PATH_NAME OF NEW GENERATED IMAGES
 path_save = '{}/{}-NUMBER_{}_aug0.{}.jpg'
 #FOLDER WHERE GENERATED IMAGES ARE STORED
-fold_path = 'img_aug/'
+fold_path = 'digit_from_grid/img_aug/'
 #NUMBER OF IMAGES GENERATED
 n_images_generated = 124 #number of images generated
 list_ret = []
