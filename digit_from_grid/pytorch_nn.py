@@ -5,6 +5,7 @@ import torch.nn as nn
 from torch.utils.data import DataLoader, Dataset, dataset
 import torch
 from torchvision import transforms
+from torchvision.transforms.transforms import Resize
 from nn_module import Net
 import torch.optim as optim
 from load_data import personalMINST
@@ -51,19 +52,20 @@ train_size = 0.6
 n_epochs = 20
 batch_size_train = 64
 batch_size_test = 1000
-learning_rate = 0.02
+learning_rate = 0.019
 momentum = 0.9
 log_interval = 5
 
 #LOANDING THE DATASET
 #THE TRANSFORM LET YOU SET THE TRANSFORMATIONA THAT YOU WANT ON THE DATASET
 transform_img = transforms.Compose([
+                            transforms.Resize((28,28)),
                             transforms.Grayscale(),
                             transforms.ToTensor()
 ])
 
 #LOAD TRAIN AND TEST BY CALLING THE PERSONALMINST CLASS AND RELATIVE METHOD (you can set train_size param to change the lenght of train and test size)
-dataset_l = personalMINST('digit_from_grid/img_aug', 'digit_from_grid/path_label.csv',train_size = train_size, transform = transform_img)
+dataset_l = personalMINST('digit_from_grid/final_dataset', 'digit_from_grid/label_final.csv',train_size = train_size, transform = transform_img)
 train_loader = DataLoader(dataset=dataset_l.get_train(), batch_size=batch_size_train, shuffle=True)
 test_loader = DataLoader(dataset=dataset_l.get_test(), batch_size=batch_size_test, shuffle=True)
 
@@ -86,7 +88,7 @@ for epoch in range(1 , n_epochs + 1):
     test()
     print(epoch, "/", n_epochs)
 
-dataset_sudoku = DataLoader(dataset=dataset_l.get_sudoku('digit_from_grid/img_r','digit_from_grid/img_r/path.csv', transform = transform_img))
+dataset_sudoku = DataLoader(dataset=dataset_l.get_sudoku('digit_from_grid/img_sudoku','digit_from_grid/img_sudoku/path.csv', transform = transform_img))
 #dataset_sudoku = DataLoader(dataset_sudoku)
 outputs = []
 for data, target in dataset_sudoku:
