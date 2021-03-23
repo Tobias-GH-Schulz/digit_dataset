@@ -67,9 +67,6 @@ class personalMINST():
 temp = generateCSV('digit_from_grid/img_r/sudoku_grid/')
 #JUNK CODE FOR DEV
 
-
-
-
 def extract_label(string):
    ret_string = string.split('NUMBER_')[1]
    return ret_string.split('_')[0]
