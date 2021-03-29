@@ -26,8 +26,9 @@ model = getPrediction()
 
 
 outputs = []
-
+print(dataset_sudoku.shape)
 for data, target in dataset_sudoku:
+  print(data.shape)
   if np.count_nonzero(data.numpy()) != 0:
     output = model.get_predictions(data)
     prediction = int(torch.max(output.data, 1)[1].numpy())

@@ -6,7 +6,7 @@ from torch.utils.data import DataLoader, Dataset, dataset
 import torch
 from torchvision import transforms
 from torchvision.transforms.transforms import Resize
-from nn_module import Net
+from nn_module_two import Net
 import torch.optim as optim
 from load_data import personalMINST
 import numpy as np
@@ -15,6 +15,7 @@ from PIL import Image
 def train(epoch):
     network.train()
     for batch_idx, (data, target) in enumerate(train_loader):
+        
         optimizer.zero_grad()
         output = network(data)
         loss = criterion(output, target)
