@@ -23,6 +23,7 @@ class sudoku_extractor():
         cell_locations = []
         arr_of_cells_images = []
         idx = 0
+
         transform_vec = transforms.Compose([
                         transforms.Resize((28,28)),
                             #transforms.Grayscale(),
@@ -51,13 +52,7 @@ class sudoku_extractor():
                     sharpening_kernel = np.ones((3, 3), np.float32) * -1
                     sharpening_kernel[1, 1] = 9
                     sharp_img = cv2.filter2D(digit, -1, sharpening_kernel)
-                    '''
-                    #TO DELETE TESTING
-                    cv2.imshow("win", sharp_img)
-                    cv2.waitKey(0)
-                    cv2.destroyAllWindows()
-                    '''
-                    #digit_sm = cv2.resize(sharp_img, (28, 28))
+                  
                     
                     #set export to true if you want to export image to folder
                     if export is True: cv2.imwrite(path + str(idx) + ".png", sharp_img)
@@ -158,8 +153,8 @@ class sudoku_extractor():
 
 if __name__ == '__main__':
     sudoku_extract = sudoku_extractor(
-        'digit_from_grid/bin1.1/sudoku_img/sudoku3.jpeg')
-    array = sudoku_extract.get_array_cells()
+        'digit_from_grid/bin1.1/not_working_img/01042021_1636.jpg')
+    array = sudoku_extract.get_array_cells(export=True, path='digit_from_grid/bin1.1/temp_file/')
     for image in array:
         print(image.shape)
         break
